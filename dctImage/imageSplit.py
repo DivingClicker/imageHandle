@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image,ImageEnhance
 
 Image.MAX_IMAGE_PIXELS = 200000000 # to avoid DecompressionBombError
 
@@ -13,6 +13,8 @@ def crop_bmp_image(image_path, output_path, crop_size):
     while y + crop_size <= height:
         while x + crop_size <= width:
             crop = original_image.crop((x, y, x + crop_size, y + crop_size))
+            enhancer = ImageEnhance.Contrast(crop)
+            crop = enhancer.enhance(6)
             crop.save(output_path + f"image_{count}.bmp")
             count += 1
             x += crop_size
@@ -21,6 +23,6 @@ def crop_bmp_image(image_path, output_path, crop_size):
 
 image_path = "images/1.bmp"
 output_path = "output_images/"
-crop_size = 256
+crop_size = 512
 
 crop_bmp_image(image_path, output_path, crop_size)
