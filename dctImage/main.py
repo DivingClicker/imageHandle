@@ -1,12 +1,15 @@
 import cv2
 import numpy as np
 
-image = cv2.imread('output_images/image_596.bmp', cv2.IMREAD_GRAYSCALE)
+image = cv2.imread('output_images/image_521.bmp', cv2.IMREAD_GRAYSCALE)
 
-
+# 使用高斯滤波去噪
+blurred_image = cv2.GaussianBlur(image, (5, 5), 0)
 # 进行离散余弦变换
-dct_image = cv2.dct(np.float32(image) / 255.0)
+dct_image = cv2.dct(np.float32(blurred_image) / 255.0)
 
+
+# dct_image = cv2.dct(np.float32(image) / 255.0)
 # 设定阈值以保留异常损伤部分（低频）
 low_freq_threshold = 10
 dct_low_freq = dct_image * (np.abs(dct_image) < low_freq_threshold)
