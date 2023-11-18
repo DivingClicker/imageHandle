@@ -6,7 +6,7 @@ def enhance_image(image):
     dct_image = cv2.dct(np.float32(image))
 
     # 设置阈值，保留较低频率的系数
-    threshold = 0.2
+    threshold = 0.08
     mask = np.abs(dct_image) > threshold * np.max(np.abs(dct_image))
     filtered_dct_image = dct_image * mask
 
@@ -24,7 +24,7 @@ def enhance_image2(image):
     dct_image = cv2.dct(np.float32(image))
 
     # 设置阈值，保留较低频率的系数
-    threshold = 0.03
+    threshold = 0
     mask = np.abs(dct_image) > threshold * np.max(np.abs(dct_image))
     filtered_dct_image = dct_image * mask
 
@@ -37,7 +37,7 @@ def enhance_image2(image):
 
     return enhanced_image
 # 读取图像
-image = cv2.imread('output_images/image_138.bmp', cv2.IMREAD_GRAYSCALE)
+image = cv2.imread('output_images/image_737.bmp', cv2.IMREAD_GRAYSCALE)
 
 # 进行图像增强
 enhanced_image = enhance_image(image)
