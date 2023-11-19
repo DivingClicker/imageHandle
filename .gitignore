@@ -1,0 +1,9 @@
+
+dctImage/.idea/
+dctImage/images/
+dctImage/dataset/
+dctImage/output_images/
+parts_inspect/parts_inspect/assets/
+parts_inspect/parts_inspect/workspace/
+parts_inspect/parts_inspect/bin/
+parts_inspect/parts_inspect/obj/

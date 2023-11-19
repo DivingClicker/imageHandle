@@ -36,17 +36,20 @@ def enhance_image2(image):
     enhanced_image = np.uint8(enhanced_image)
 
     return enhanced_image
-# 读取图像
-image = cv2.imread('output_images/image_737.bmp', cv2.IMREAD_GRAYSCALE)
 
-# 进行图像增强
-enhanced_image = enhance_image(image)
-enhanced_image2 = enhance_image2(image)
+for(i) in range(1, 2484):
+    # 读取原始图像
+    image = cv2.imread('output_images/image_'+str(i)+'.bmp', cv2.IMREAD_GRAYSCALE)
 
-# 可视化结果
-cv2.imshow('Original Image', image)
-cv2.imshow('Enhanced Image1', enhanced_image)
-cv2.imshow('Enhanced Image2', enhanced_image2)
-cv2.imshow('Enhanced Image3', cv2.subtract(enhanced_image2, enhanced_image))
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # 进行图像增强
+    enhanced_image = enhance_image(image)
+    enhanced_image2 = enhance_image2(image)
+
+    # 可视化结果
+    # cv2.imshow('Original Image', image)
+    # cv2.imshow('Enhanced Image1', enhanced_image)
+    # cv2.imshow('Enhanced Image2', enhanced_image2)
+    # cv2.imshow('Enhanced Image3', cv2.subtract(enhanced_image2, enhanced_image))
+    cv2.imwrite('dataset/image_'+str(i)+'.bmp', cv2.subtract(enhanced_image2, enhanced_image))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
