@@ -4,6 +4,9 @@ dctImage/images/
 dctImage/dataset/
 dctImage/output_images/
 parts_inspect/parts_inspect/assets/
+parts_inspect/parts_inspect/assets_2/
 parts_inspect/parts_inspect/workspace/
 parts_inspect/parts_inspect/bin/
 parts_inspect/parts_inspect/obj/
+dctImage/assets/
+parts_inspect/parts_inspect/*.zip
