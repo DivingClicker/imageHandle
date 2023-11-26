@@ -47,8 +47,8 @@ def generate_shifted_images(input_folder, output_folder, max_shift):
 
 if __name__ == "__main__":
     # 输入文件夹路径和输出文件夹路径
-    input_folder_path = "assets/W"
-    output_folder_path = "assets/W"
+    input_folder_path = "assets_2/W"
+    output_folder_path = "assets_2/W"
 
     # 设置最大平移距离
     max_shift_distance = 250  # 调整为你希望的最大平移距离

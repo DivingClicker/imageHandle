@@ -21,7 +21,7 @@ def crop_bmp_image(image_path, output_path, crop_size):
         x = 0
         y += crop_size
 
-image_path = "images/1.bmp"
+image_path = "images/4.bmp"
 output_path = "output_images/"
 crop_size = 256
 

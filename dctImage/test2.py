@@ -37,9 +37,9 @@ def enhance_image2(image):
 
     return enhanced_image
 
-for(i) in range(1, 2484):
+for(i) in range(1, 2380):
     # 读取原始图像
-    image = cv2.imread('output_images/image_'+str(i)+'.bmp', cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('output_images/image_'+str(i)+'.jpg', cv2.IMREAD_GRAYSCALE)
 
     # 进行图像增强
     enhanced_image = enhance_image(image)
@@ -50,6 +50,6 @@ for(i) in range(1, 2484):
     # cv2.imshow('Enhanced Image1', enhanced_image)
     # cv2.imshow('Enhanced Image2', enhanced_image2)
     # cv2.imshow('Enhanced Image3', cv2.subtract(enhanced_image2, enhanced_image))
-    cv2.imwrite('dataset/image_'+str(i)+'.bmp', cv2.subtract(enhanced_image2, enhanced_image))
+    cv2.imwrite('test/image_'+str(i)+'.jpg', cv2.subtract(enhanced_image2, enhanced_image))
     cv2.waitKey(0)
     cv2.destroyAllWindows()
