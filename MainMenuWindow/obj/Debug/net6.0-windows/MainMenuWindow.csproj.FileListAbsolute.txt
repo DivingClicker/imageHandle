@@ -1,0 +1,17 @@
+E:\imageHandle\MainMenuWindow\bin\Debug\net6.0-windows\MainMenuWindow.exe
+E:\imageHandle\MainMenuWindow\bin\Debug\net6.0-windows\MainMenuWindow.deps.json
+E:\imageHandle\MainMenuWindow\bin\Debug\net6.0-windows\MainMenuWindow.runtimeconfig.json
+E:\imageHandle\MainMenuWindow\bin\Debug\net6.0-windows\MainMenuWindow.dll
+E:\imageHandle\MainMenuWindow\bin\Debug\net6.0-windows\MainMenuWindow.pdb
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.Form1.resources
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.csproj.GenerateResource.cache
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.GeneratedMSBuildEditorConfig.editorconfig
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.AssemblyInfoInputs.cache
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.AssemblyInfo.cs
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.csproj.CoreCompileInputs.cache
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.dll
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\refint\MainMenuWindow.dll
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.pdb
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.genruntimeconfig.cache
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\ref\MainMenuWindow.dll
+E:\imageHandle\MainMenuWindow\obj\Debug\net6.0-windows\MainMenuWindow.Properties.Resources.resources
