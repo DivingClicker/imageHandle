@@ -8,7 +8,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.ML" Version="1.7.1" />
     <PackageReference Include="Microsoft.ML.Vision" Version="1.7.1" />
+    <PackageReference Include="pythonnet" Version="3.0.3" />
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup Label="MLModel1">
     <None Include="MLModel1.consumption.cs">
@@ -21,5 +23,8 @@
       <DependentUpon>MLModel1.mbconfig</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="test\" />
   </ItemGroup>
 </Project>
