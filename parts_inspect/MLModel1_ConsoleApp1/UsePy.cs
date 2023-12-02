@@ -10,15 +10,21 @@ using System.Drawing;
 
 namespace App
 {
-    internal class UsePy
+    public class UsePy
     {
         public UsePy()
         {   //根据自己dctimage项目的python环境路径修改,python代码里的包要在python环境里下好，比如numpy之类
-            string pathToVirtualEnv = @"E:\anaconda3\envs\dctImage";
+            string pathToVirtualEnv =
+                //@"E:\anaconda3\envs\dctImage";
+                @"C:\Users\admin\anaconda3\envs\dctImage";
             Runtime.PythonDLL = Path.Combine(pathToVirtualEnv, "python39.dll");//需要用3.9版本的python
             PythonEngine.PythonHome = Path.Combine(pathToVirtualEnv, "python.exe");
             //python代码路径，统一放在项目pySrc文件夹
-            PythonEngine.PythonPath = $"E:\\Code\\imageHandle\\parts_inspect\\pySrc;{pathToVirtualEnv}\\Lib\\site-packages;{pathToVirtualEnv}\\Lib";
+            PythonEngine.PythonPath = 
+                //$"E:\\Code\\"
+                $"E:\\"
+                +
+                $"imageHandle\\parts_inspect\\pySrc;{pathToVirtualEnv}\\Lib\\site-packages;{pathToVirtualEnv}\\Lib";
             PythonEngine.Initialize();
         }
         //切割

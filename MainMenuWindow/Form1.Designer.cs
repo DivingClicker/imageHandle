@@ -32,10 +32,13 @@
             StartCheckButton = new Button();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
+            label3 = new Label();
             menuStrip1 = new MenuStrip();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            btnZoomOut = new Button();
             label2 = new Label();
             CountLabel = new Label();
+            btnZoomIn = new Button();
             label1 = new Label();
             pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -85,7 +88,7 @@
             // 
             splitContainer1.Panel2.Controls.Add(pictureBox1);
             splitContainer1.Size = new Size(800, 450);
-            splitContainer1.SplitterDistance = 216;
+            splitContainer1.SplitterDistance = 300;
             splitContainer1.TabIndex = 2;
             // 
             // splitContainer2
@@ -97,25 +100,37 @@
             // 
             // splitContainer2.Panel1
             // 
+            splitContainer2.Panel1.Controls.Add(label3);
             splitContainer2.Panel1.Controls.Add(SelectPicButton);
             splitContainer2.Panel1.Controls.Add(StartCheckButton);
             splitContainer2.Panel1.Controls.Add(menuStrip1);
             // 
             // splitContainer2.Panel2
             // 
+            splitContainer2.Panel2.Controls.Add(btnZoomOut);
             splitContainer2.Panel2.Controls.Add(label2);
             splitContainer2.Panel2.Controls.Add(CountLabel);
+            splitContainer2.Panel2.Controls.Add(btnZoomIn);
             splitContainer2.Panel2.Controls.Add(label1);
-            splitContainer2.Size = new Size(216, 450);
+            splitContainer2.Size = new Size(300, 450);
             splitContainer2.SplitterDistance = 225;
             splitContainer2.TabIndex = 6;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft YaHei UI", 12F);
+            label3.Location = new Point(3, 170);
+            label3.Name = "label3";
+            label3.Size = new Size(0, 21);
+            label3.TabIndex = 3;
             // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(216, 25);
+            menuStrip1.Size = new Size(300, 25);
             menuStrip1.TabIndex = 2;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -126,10 +141,21 @@
             aboutToolStripMenuItem.Text = "About";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
+            // btnZoomOut
+            // 
+            btnZoomOut.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnZoomOut.Location = new Point(222, 32);
+            btnZoomOut.Name = "btnZoomOut";
+            btnZoomOut.Size = new Size(75, 23);
+            btnZoomOut.TabIndex = 6;
+            btnZoomOut.Text = "缩小图片";
+            btnZoomOut.UseVisualStyleBackColor = true;
+            btnZoomOut.Click += btnZoomOut_Click;
+            // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label2.Font = new Font("Microsoft YaHei UI", 12F);
             label2.Location = new Point(101, 19);
             label2.Name = "label2";
             label2.Size = new Size(58, 21);
@@ -139,17 +165,28 @@
             // CountLabel
             // 
             CountLabel.AutoSize = true;
-            CountLabel.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            CountLabel.Font = new Font("Microsoft YaHei UI", 12F);
             CountLabel.Location = new Point(75, 19);
             CountLabel.Name = "CountLabel";
             CountLabel.Size = new Size(19, 21);
             CountLabel.TabIndex = 5;
             CountLabel.Text = "0";
             // 
+            // btnZoomIn
+            // 
+            btnZoomIn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnZoomIn.Location = new Point(222, 3);
+            btnZoomIn.Name = "btnZoomIn";
+            btnZoomIn.Size = new Size(75, 23);
+            btnZoomIn.TabIndex = 4;
+            btnZoomIn.Text = "放大图片";
+            btnZoomIn.UseVisualStyleBackColor = true;
+            btnZoomIn.Click += btnZoomIn_Click;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Font = new Font("Microsoft YaHei UI", 12F);
             label1.Location = new Point(20, 19);
             label1.Name = "label1";
             label1.Size = new Size(58, 21);
@@ -159,14 +196,14 @@
             // pictureBox1
             // 
             pictureBox1.BackColor = SystemColors.ActiveBorder;
-            pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-            pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(580, 450);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.Size = new Size(496, 450);
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
+            pictureBox1.MouseDown += pictureBox1_MouseDown;
+            pictureBox1.MouseMove += pictureBox1_MouseMove;
             // 
             // Form1
             // 
@@ -177,8 +214,10 @@
             MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "螺纹缺陷检查";
+            SizeChanged += Form1_SizeChanged;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
@@ -205,5 +244,8 @@
         private SplitContainer splitContainer2;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem aboutToolStripMenuItem;
+        private Label label3;
+        private Button btnZoomOut;
+        private Button btnZoomIn;
     }
 }
