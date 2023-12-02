@@ -18,3 +18,9 @@ parts_inspect/MLModel1_ConsoleApp1/bin/
 parts_inspect/MLModel1_ConsoleApp1/obj
 dctImage/test2/
 dctImage/build/
+MainMenuWindow/bin/
+MainMenuWindow/obj/
+ProcessedImages/combined/*.bmp
+ProcessedImages/sliced/*.bmp
+ProcessedImages/enhanced/*.jpg
+

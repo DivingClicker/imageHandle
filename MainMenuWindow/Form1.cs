@@ -1,61 +1,191 @@
+ï»¿using System.Drawing.Imaging;
 using System.Windows.Forms;
+using App;
+using Microsoft.VisualBasic.ApplicationServices;
+using MLModel1_ConsoleApp1;
 
 namespace MainMenuWindow
 {
     public partial class Form1 : Form
     {
         private ToolTip tooltipSelect, tooltipCheck;
+        string imagePath;
+        string processPath = AppDomain.CurrentDomain.BaseDirectory;
+        string slicedPath, enhancedPath, combinedPath;
+
+        private float scaleFactor = 1.0f;
+        private Point previousMouseLocation;
+        Image originalImage;
         public Form1()
         {
             InitializeComponent();
             tooltipSelect = new ToolTip();
-            tooltipSelect.SetToolTip(SelectPicButton, "Ñ¡ÔñÄúĞèÒª¼ì²éµÄÂİÎÆÍ¼Æ¬");
+            tooltipSelect.SetToolTip(SelectPicButton, "é€‰æ‹©æ‚¨éœ€è¦æ£€æŸ¥çš„èºçº¹å›¾ç‰‡");
             tooltipCheck = new ToolTip();
-            tooltipCheck.SetToolTip(StartCheckButton, "¿ªÊ¼¶ÔÂİÎÆÍ¼Æ¬µÄ¼ì²é£¬²¢½«È±ÏİÊıÏÔÊ¾ÔÚÏÂ·½");
+            tooltipCheck.SetToolTip(StartCheckButton, "å¼€å§‹å¯¹èºçº¹å›¾ç‰‡çš„æ£€æŸ¥ï¼Œå¹¶å°†ç¼ºé™·æ•°æ˜¾ç¤ºåœ¨ä¸‹æ–¹");
+            for (int i = 0; i < 5; i++)
+            {
+                processPath = Path.GetDirectoryName(processPath);
+            }
+            processPath = Path.Combine(processPath, "ProcessedImages");
+            slicedPath = Path.Combine(processPath, "sliced") + @"\";
+            enhancedPath = Path.Combine(processPath, "enhanced") + @"\";
+            combinedPath = Path.Combine(processPath, "combined") + @"\";
+            label3.Text = combinedPath;
         }
 
         private void SelectPicButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.gif;*.bmp)|*.png;*.jpg;*.jpeg;*.gif;*.bmp";
+            openFileDialog.Filter = "Image Files (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                // »ñÈ¡Ñ¡ÔñµÄÍ¼Æ¬Â·¾¶
-                string imagePath = openFileDialog.FileName;
+                // è·å–é€‰æ‹©çš„å›¾ç‰‡è·¯å¾„
+                imagePath = openFileDialog.FileName;
 
-                // ¼ÓÔØÍ¼Æ¬²¢Õ¹Ê¾ÔÚÍ¼Æ¬¿òÖĞ
+                // åŠ è½½å›¾ç‰‡å¹¶å±•ç¤ºåœ¨å›¾ç‰‡æ¡†ä¸­
                 Image image = Image.FromFile(imagePath);
                 pictureBox1.Image = image;
+                originalImage = image;
             }
         }
 
         private void StartCheckButton_Click(object sender, EventArgs e)
         {
-            /* µ÷ÓÃº¯Êı´¦Àí/Ö±½Ó´¦ÀíÍ¼Æ¬ */
-            int count = checkPicture(pictureBox1.Image);
-            MessageBox.Show("¼ì²éÍê³É£¡", "ÌáÊ¾");
+            /* è°ƒç”¨å‡½æ•°å¤„ç†/ç›´æ¥å¤„ç†å›¾ç‰‡ */
+            int count = checkPicture(imagePath);
             CountLabel.Text = count.ToString();
+            MessageBox.Show("æ£€æŸ¥å®Œæˆï¼", "æç¤º");
+
         }
 
-        private int checkPicture(Image img)
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
+        private void drawBorder(string imgpath)
+        {
+            imgpath = imgpath.Replace(@"\", @"\\");
+            using (Bitmap img = new Bitmap(imgpath))
+            {
+                Bitmap borderedImg = new Bitmap(img.Width, img.Height);
+                using (Graphics graphics = Graphics.FromImage(borderedImg))
+                {
+                    graphics.DrawImage(img, Point.Empty);
+                    using (Pen pen = new Pen(Color.Red, 4))
+                    {
+                        graphics.DrawRectangle(pen, new Rectangle(0, 0, img.Width - 1, img.Height - 1));
+                    }
+                }
+                // é‡Šæ”¾åŸå§‹å›¾ç‰‡èµ„æº
+                img.Dispose();
+                borderedImg.Save(imgpath);
+            }
+        }
+
+
+        private int checkPicture(string originalPath)
         {
 
-            int count = 54;
-            /* ¶Ôimg½øĞĞ´¦Àí·ÖÎö 
-                countÊÇ¼ÆËãËğÉËÊıÁ¿µÄ±äÁ¿¡£
-                µ÷ÓÃÄ£ĞÍ·ÖÎöÍ¼Æ¬
-             
-             */
+            int count = 0;
+            //å¤„ç†å›¾ç‰‡
+            UsePy py = new UsePy();
+            py.Crop(originalPath, slicedPath, 256);
+            py.Enhan(slicedPath, enhancedPath);
+            //è·å–å¢å¼ºçš„å›¾ç‰‡åœ°å€
+            string[] ipaths = Directory.GetFiles(enhancedPath, "*.jpg");
 
+            foreach (string ipath in ipaths)
+            {
+                MLModel1.ModelInput sampleData = new MLModel1.ModelInput()
+                {
+                    ImageSource = File.ReadAllBytes(ipath),
+                };
+                var predictionResult = MLModel1.Predict(sampleData);
+                var WScore = predictionResult.Score[0];
+                var Rscore = predictionResult.Score[1];
+                if (WScore >= 0.4)
+                {
+                    //æš‚æ—¶å–0.4ä½œä¸ºé˜ˆå€¼
+                    count++;
+                    //è·å–å¯¹åº”çš„è£å‰ªåå›¾ç‰‡ä½ç½®å¹¶ç”»ä¸Šæ¡†
+                    string imgname = Path.GetFileNameWithoutExtension(ipath);
+                    string[] matchimg = Directory.GetFiles(slicedPath, imgname + ".bmp", SearchOption.TopDirectoryOnly);
+                    if (matchimg.Length != 0)
+                    {
+                        drawBorder(matchimg[0]);
+                    }
+                }
+            }
+            //å°†å¤„ç†åçš„è£å‰ªå›¾ç‰‡æ‹¼æ¥èµ·æ¥
+            string filepath = py.Com(slicedPath, combinedPath);
+            Image image = Image.FromFile(filepath);
+            pictureBox1.Image = image;
+            originalImage = image;
+            label3.Text = filepath;
             return count;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "±¾Èí¼şÖ¼ÔÚÊ¶±ğ³öÂİÎÆÉÏµÄÈ±Ïİ²¢±ê³ö£¨£¿£©£¬¾ßÌåÊ¹ÓÃ·½·¨ÎªÑ¡ÔñĞèÒª¼ì²éµÄÍ¼Æ¬£¬È»ºóµã»÷¿ªÊ¼¼ì²é¼´¿É"
-                , "¹ØÓÚ±¾Èí¼ş", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                "æœ¬è½¯ä»¶æ—¨åœ¨è¯†åˆ«å‡ºèºçº¹ä¸Šçš„ç¼ºé™·å¹¶æ ‡å‡ºï¼ˆï¼Ÿï¼‰ï¼Œå…·ä½“ä½¿ç”¨æ–¹æ³•ä¸ºé€‰æ‹©éœ€è¦æ£€æŸ¥çš„å›¾ç‰‡ï¼Œç„¶åç‚¹å‡»å¼€å§‹æ£€æŸ¥å³å¯"
+                , "å…³äºæœ¬è½¯ä»¶", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void ApplyImageTransform()
+        {
+            // åº”ç”¨å›¾ç‰‡çš„ç¼©æ”¾å˜æ¢
+            int newWidth = (int)(originalImage.Width * scaleFactor);
+            int newHeight = (int)(originalImage.Height * scaleFactor);
+            Image scaledImage = new Bitmap(originalImage, newWidth, newHeight);
+            pictureBox1.Image = scaledImage;
+        }
+
+        private void btnZoomIn_Click(object sender, EventArgs e)
+        {
+            scaleFactor *= 1.2f;
+            ApplyImageTransform();
+        }
+
+        private void btnZoomOut_Click(object sender, EventArgs e)
+        {
+            scaleFactor /= 1.2f;
+            ApplyImageTransform();
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            previousMouseLocation = e.Location;
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // æ‹–åŠ¨å›¾ç‰‡
+                int deltaX = e.Location.X - previousMouseLocation.X;
+                int deltaY = e.Location.Y - previousMouseLocation.Y;
+
+                pictureBox1.Left += deltaX;
+                pictureBox1.Top += deltaY;
+            }
+        }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.Dock = DockStyle.None;
         }
     }
 }

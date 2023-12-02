@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App", "MLModel1_ConsoleApp1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "parts_inspect", "parts_inspect\parts_inspect.csproj", "{59534424-9E5A-4DF6-A186-98D4100E730D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainMenuWindow", "..\MainMenuWindow\MainMenuWindow.csproj", "{29E7F531-1AED-49B5-A9DB-7814C03A4D5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{59534424-9E5A-4DF6-A186-98D4100E730D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59534424-9E5A-4DF6-A186-98D4100E730D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59534424-9E5A-4DF6-A186-98D4100E730D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29E7F531-1AED-49B5-A9DB-7814C03A4D5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29E7F531-1AED-49B5-A9DB-7814C03A4D5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29E7F531-1AED-49B5-A9DB-7814C03A4D5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29E7F531-1AED-49B5-A9DB-7814C03A4D5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
