@@ -10,23 +10,29 @@ using System.Drawing;
 
 namespace App
 {
-    public class UsePy
+    public class UsePy: IDisposable
     {
         public UsePy()
         {   //根据自己dctimage项目的python环境路径修改,python代码里的包要在python环境里下好，比如numpy之类
             string pathToVirtualEnv =
-                //@"E:\anaconda3\envs\dctImage";
-                @"C:\Users\admin\anaconda3\envs\dctImage";
+                @"E:\anaconda3\envs\dctImage";
+                //@"C:\Users\admin\anaconda3\envs\dctImage";
             Runtime.PythonDLL = Path.Combine(pathToVirtualEnv, "python39.dll");//需要用3.9版本的python
             PythonEngine.PythonHome = Path.Combine(pathToVirtualEnv, "python.exe");
             //python代码路径，统一放在项目pySrc文件夹
-            PythonEngine.PythonPath = 
-                //$"E:\\Code\\"
-                $"E:\\"
+            PythonEngine.PythonPath =
+                $"E:\\Code\\"
+                //$"E:\\"
                 +
                 $"imageHandle\\parts_inspect\\pySrc;{pathToVirtualEnv}\\Lib\\site-packages;{pathToVirtualEnv}\\Lib";
             PythonEngine.Initialize();
         }
+
+        ~UsePy()
+        {
+            Dispose(false);
+        }
+
         //切割
         public string Crop(string filePath, string outfoldPath, int size)
         {
@@ -85,6 +91,25 @@ namespace App
 
             Console.WriteLine("转换完成");
 
+        }
+
+        // 实现 IDisposable 接口
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // 释放资源的方法
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // 在这里释放托管资源（如果有的话）
+            }
+
+            // 释放非托管资源
+            PythonEngine.Shutdown();
         }
     }
 

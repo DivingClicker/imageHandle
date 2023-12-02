@@ -12,7 +12,6 @@ namespace MainMenuWindow
         string imagePath;
         string processPath = AppDomain.CurrentDomain.BaseDirectory;
         string slicedPath, enhancedPath, combinedPath;
-
         private float scaleFactor = 1.0f;
         private Point previousMouseLocation;
         Image originalImage;
@@ -51,10 +50,10 @@ namespace MainMenuWindow
             }
         }
 
-        private void StartCheckButton_Click(object sender, EventArgs e)
+        private async void StartCheckButton_Click(object sender, EventArgs e)
         {
             /* 调用函数处理/直接处理图片 */
-            int count = checkPicture(imagePath);
+            int count =await checkPicture(imagePath);
             CountLabel.Text = count.ToString();
             MessageBox.Show("检查完成！", "提示");
 
@@ -94,46 +93,51 @@ namespace MainMenuWindow
         }
 
 
-        private int checkPicture(string originalPath)
+        private async Task<int> checkPicture(string originalPath)
         {
-
             int count = 0;
-            //处理图片
-            UsePy py = new UsePy();
-            py.Crop(originalPath, slicedPath, 256);
-            py.Enhan(slicedPath, enhancedPath);
-            //获取增强的图片地址
-            string[] ipaths = Directory.GetFiles(enhancedPath, "*.jpg");
+            await Task.Run( () =>
+           {
+               using (UsePy py = new())
+               {
+                   //处理图片
+                   //UsePy py = new UsePy();
+                   py.Crop(originalPath, slicedPath, 256);
+                   py.Enhan(slicedPath, enhancedPath);
+                   //获取增强的图片地址
+                   string[] ipaths = Directory.GetFiles(enhancedPath, "*.jpg");
 
-            foreach (string ipath in ipaths)
-            {
-                MLModel1.ModelInput sampleData = new MLModel1.ModelInput()
-                {
-                    ImageSource = File.ReadAllBytes(ipath),
-                };
-                var predictionResult = MLModel1.Predict(sampleData);
-                var WScore = predictionResult.Score[0];
-                var Rscore = predictionResult.Score[1];
-                if (WScore >= 0.4)
-                {
-                    //暂时取0.4作为阈值
-                    count++;
-                    //获取对应的裁剪后图片位置并画上框
-                    string imgname = Path.GetFileNameWithoutExtension(ipath);
-                    string[] matchimg = Directory.GetFiles(slicedPath, imgname + ".bmp", SearchOption.TopDirectoryOnly);
-                    if (matchimg.Length != 0)
-                    {
-                        drawBorder(matchimg[0]);
-                    }
-                }
-            }
-            //将处理后的裁剪图片拼接起来
-            string filepath = py.Com(slicedPath, combinedPath);
-            Image image = Image.FromFile(filepath);
-            pictureBox1.Image = image;
-            originalImage = image;
-            label3.Text = filepath;
-            return count;
+                   foreach (string ipath in ipaths)
+                   {
+                       MLModel1.ModelInput sampleData = new MLModel1.ModelInput()
+                       {
+                           ImageSource = File.ReadAllBytes(ipath),
+                       };
+                       var predictionResult = MLModel1.Predict(sampleData);
+                       var WScore = predictionResult.Score[0];
+                       var Rscore = predictionResult.Score[1];
+                       if (WScore >= 0.4)
+                       {
+                           //暂时取0.4作为阈值
+                           count++;
+                           //获取对应的裁剪后图片位置并画上框
+                           string imgname = Path.GetFileNameWithoutExtension(ipath);
+                           string[] matchimg = Directory.GetFiles(slicedPath, imgname + ".bmp", SearchOption.TopDirectoryOnly);
+                           if (matchimg.Length != 0)
+                           {
+                              drawBorder(matchimg[0]);
+                           }
+                       }
+                   }
+                   //将处理后的裁剪图片拼接起来
+                   string filepath = py.Com(slicedPath, combinedPath);
+                   Image image = Image.FromFile(filepath);
+                   pictureBox1.Image = image;
+                   originalImage = image;
+                   label3.Text = filepath;
+               }
+           });
+                return count;         
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
