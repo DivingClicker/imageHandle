@@ -32,11 +32,16 @@
             StartCheckButton = new Button();
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
+            rateLabel = new Label();
+            hold_label = new Label();
+            setBtn = new Button();
             progLabel = new Label();
             progressBarofCheck = new ProgressBar();
             label3 = new Label();
             menuStrip1 = new MenuStrip();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            result_label = new Label();
+            label5 = new Label();
             originalBtn = new Button();
             overviewBtn = new Button();
             ratioLabel = new Label();
@@ -61,9 +66,10 @@
             // 
             // SelectPicButton
             // 
+            SelectPicButton.Font = new Font("Microsoft YaHei UI", 11F);
             SelectPicButton.Location = new Point(3, 69);
             SelectPicButton.Name = "SelectPicButton";
-            SelectPicButton.Size = new Size(75, 23);
+            SelectPicButton.Size = new Size(90, 30);
             SelectPicButton.TabIndex = 0;
             SelectPicButton.Text = "选择图片";
             SelectPicButton.UseVisualStyleBackColor = true;
@@ -71,9 +77,10 @@
             // 
             // StartCheckButton
             // 
+            StartCheckButton.Font = new Font("Microsoft YaHei UI", 11F);
             StartCheckButton.Location = new Point(3, 109);
             StartCheckButton.Name = "StartCheckButton";
-            StartCheckButton.Size = new Size(75, 23);
+            StartCheckButton.Size = new Size(90, 30);
             StartCheckButton.TabIndex = 1;
             StartCheckButton.Text = "开始检查";
             StartCheckButton.UseVisualStyleBackColor = true;
@@ -106,6 +113,9 @@
             // 
             // splitContainer2.Panel1
             // 
+            splitContainer2.Panel1.Controls.Add(rateLabel);
+            splitContainer2.Panel1.Controls.Add(hold_label);
+            splitContainer2.Panel1.Controls.Add(setBtn);
             splitContainer2.Panel1.Controls.Add(progLabel);
             splitContainer2.Panel1.Controls.Add(progressBarofCheck);
             splitContainer2.Panel1.Controls.Add(label3);
@@ -115,6 +125,8 @@
             // 
             // splitContainer2.Panel2
             // 
+            splitContainer2.Panel2.Controls.Add(result_label);
+            splitContainer2.Panel2.Controls.Add(label5);
             splitContainer2.Panel2.Controls.Add(originalBtn);
             splitContainer2.Panel2.Controls.Add(overviewBtn);
             splitContainer2.Panel2.Controls.Add(ratioLabel);
@@ -127,6 +139,37 @@
             splitContainer2.Size = new Size(300, 450);
             splitContainer2.SplitterDistance = 225;
             splitContainer2.TabIndex = 6;
+            // 
+            // rateLabel
+            // 
+            rateLabel.AutoSize = true;
+            rateLabel.Font = new Font("Microsoft YaHei UI", 12F);
+            rateLabel.Location = new Point(127, 71);
+            rateLabel.Name = "rateLabel";
+            rateLabel.Size = new Size(170, 21);
+            rateLabel.TabIndex = 8;
+            rateLabel.Text = "当前标准合格率：95%";
+            // 
+            // hold_label
+            // 
+            hold_label.AutoSize = true;
+            hold_label.Font = new Font("Microsoft YaHei UI", 12F);
+            hold_label.Location = new Point(127, 30);
+            hold_label.Name = "hold_label";
+            hold_label.Size = new Size(144, 21);
+            hold_label.TabIndex = 7;
+            hold_label.Text = "当前模型阈值：0.4";
+            // 
+            // setBtn
+            // 
+            setBtn.Font = new Font("Microsoft YaHei UI", 11F);
+            setBtn.Location = new Point(4, 28);
+            setBtn.Name = "setBtn";
+            setBtn.Size = new Size(90, 30);
+            setBtn.TabIndex = 6;
+            setBtn.Text = "设置";
+            setBtn.UseVisualStyleBackColor = true;
+            setBtn.Click += setBtn_Click;
             // 
             // progLabel
             // 
@@ -172,16 +215,36 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(55, 21);
-            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Size = new Size(68, 21);
+            aboutToolStripMenuItem.Text = "关于软件";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
+            // result_label
+            // 
+            result_label.AutoSize = true;
+            result_label.Font = new Font("Microsoft YaHei UI", 12F);
+            result_label.Location = new Point(100, 139);
+            result_label.Name = "result_label";
+            result_label.Size = new Size(0, 21);
+            result_label.TabIndex = 12;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Microsoft YaHei UI", 12F);
+            label5.Location = new Point(4, 139);
+            label5.Name = "label5";
+            label5.Size = new Size(90, 21);
+            label5.TabIndex = 11;
+            label5.Text = "检测结果：";
             // 
             // originalBtn
             // 
             originalBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            originalBtn.Location = new Point(222, 3);
+            originalBtn.Font = new Font("Microsoft YaHei UI", 11F);
+            originalBtn.Location = new Point(207, 3);
             originalBtn.Name = "originalBtn";
-            originalBtn.Size = new Size(75, 23);
+            originalBtn.Size = new Size(90, 30);
             originalBtn.TabIndex = 10;
             originalBtn.Text = "查看原始";
             originalBtn.UseVisualStyleBackColor = true;
@@ -190,9 +253,10 @@
             // overviewBtn
             // 
             overviewBtn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            overviewBtn.Location = new Point(222, 90);
+            overviewBtn.Font = new Font("Microsoft YaHei UI", 11F);
+            overviewBtn.Location = new Point(207, 111);
             overviewBtn.Name = "overviewBtn";
-            overviewBtn.Size = new Size(75, 23);
+            overviewBtn.Size = new Size(90, 30);
             overviewBtn.TabIndex = 9;
             overviewBtn.Text = "查看缩略";
             overviewBtn.UseVisualStyleBackColor = true;
@@ -222,9 +286,10 @@
             // btnZoomOut
             // 
             btnZoomOut.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnZoomOut.Location = new Point(222, 61);
+            btnZoomOut.Font = new Font("Microsoft YaHei UI", 11F);
+            btnZoomOut.Location = new Point(207, 75);
             btnZoomOut.Name = "btnZoomOut";
-            btnZoomOut.Size = new Size(75, 23);
+            btnZoomOut.Size = new Size(90, 30);
             btnZoomOut.TabIndex = 6;
             btnZoomOut.Text = "缩小图片";
             btnZoomOut.UseVisualStyleBackColor = true;
@@ -254,9 +319,10 @@
             // btnZoomIn
             // 
             btnZoomIn.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            btnZoomIn.Location = new Point(222, 32);
+            btnZoomIn.Font = new Font("Microsoft YaHei UI", 11F);
+            btnZoomIn.Location = new Point(207, 39);
             btnZoomIn.Name = "btnZoomIn";
-            btnZoomIn.Size = new Size(75, 23);
+            btnZoomIn.Size = new Size(90, 30);
             btnZoomIn.TabIndex = 4;
             btnZoomIn.Text = "放大图片";
             btnZoomIn.UseVisualStyleBackColor = true;
@@ -332,5 +398,10 @@
         private Label ratioLabel;
         private Button originalBtn;
         private Button overviewBtn;
+        private Button setBtn;
+        private Label label5;
+        private Label result_label;
+        private Label rateLabel;
+        private Label hold_label;
     }
 }

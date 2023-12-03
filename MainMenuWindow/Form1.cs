@@ -8,6 +8,8 @@ namespace MainMenuWindow
 {
     public partial class Form1 : Form
     {
+        public static float Threshold { get; set; } = 0.4f;
+        public static float PassRate { get; set; } = 95.0f;
         private ToolTip tooltipSelect, tooltipCheck;
         string imagePath = string.Empty;
         string processPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -75,19 +77,21 @@ namespace MainMenuWindow
         private async void StartCheckButton_Click(object sender, EventArgs e)
         {
             /* 调用函数处理/直接处理图片 */
-            if(pictureBox1.Image == null)
+            if (pictureBox1.Image == null)
             {
-                MessageBox.Show("未选择图片！","错误",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("未选择图片！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             progressBarofCheck.Value = 0;
             StartCheckButton.Enabled = false;
             SelectPicButton.Enabled = false;
+            setBtn.Enabled = false;
             int count = await checkPicture(imagePath);
             StartCheckButton.Enabled = true;
             SelectPicButton.Enabled = true;
+            setBtn.Enabled = true;
             CountLabel.Text = count.ToString();
-            MessageBox.Show("检查完成！", "提示",MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("检查完成！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -139,7 +143,7 @@ namespace MainMenuWindow
                        var predictionResult = MLModel1.Predict(sampleData);
                        var WScore = predictionResult.Score[0];
                        var Rscore = predictionResult.Score[1];
-                       if (WScore >= 0.4)
+                       if (WScore >= Threshold)
                        {
                            //暂时取0.4作为阈值
                            count++;
@@ -165,13 +169,25 @@ namespace MainMenuWindow
            });
             float passRatio = 100.0f * (progressBarofCheck.Maximum - count) / progressBarofCheck.Maximum;
             ratioLabel.Text = passRatio.ToString("0.00") + "%";
+            if (passRatio < PassRate)
+            {
+                ratioLabel.ForeColor = Color.Red;
+                result_label.ForeColor = Color.Red;
+                result_label.Text = "不合格!";
+            }
+            else
+            {
+                ratioLabel.ForeColor = Color.Green;
+                result_label.ForeColor = Color.Green;
+                result_label.Text = "合格!";
+            }
             return count;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "本软件旨在识别出螺纹上的缺陷并标出（？），具体使用方法为选择需要检查的图片，然后点击开始检查即可"
+                "本软件旨在识别出零件上的缺陷并标出，具体使用方法为选择需要检查的图片，然后点击开始检查即可，用户可自定义设置模型阈值和标准合格率"
                 , "关于本软件", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -244,5 +260,27 @@ namespace MainMenuWindow
             overviewBtn.Visible = false;
             originalBtn.Visible = true;
         }
+
+        private void setBtn_Click(object sender, EventArgs e)
+        {
+            using (SettingsDialog settingsDialog = new SettingsDialog())
+            {
+                settingsDialog.Threshold = Threshold;
+                settingsDialog.PassRate = PassRate;
+                DialogResult result = settingsDialog.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    // 用户点击了保存按钮
+                    Threshold = settingsDialog.Threshold;
+                    PassRate = settingsDialog.PassRate;
+                    hold_label.Text = "当前模型阈值：" + Threshold.ToString();
+                    rateLabel.Text = "当前标准合格率：" + PassRate.ToString() + "%";
+                }
+            }
+
+        }
     }
+
+
 }

@@ -7,7 +7,7 @@
     "FolderPath": "E:\\Code\\imageHandle\\parts_inspect\\parts_inspect\\assets"
   },
   "Environment": {
-    "Type": "LocalCPU",
+    "Type": "LocalGPU",
     "Version": 1
   },
   "RunHistory": {
