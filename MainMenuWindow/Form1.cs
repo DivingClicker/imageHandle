@@ -9,7 +9,7 @@ namespace MainMenuWindow
     public partial class Form1 : Form
     {
         private ToolTip tooltipSelect, tooltipCheck;
-        string imagePath;
+        string imagePath = string.Empty;
         string processPath = AppDomain.CurrentDomain.BaseDirectory;
         string slicedPath, enhancedPath, combinedPath;
         private float scaleFactor = 1.0f;
@@ -30,7 +30,29 @@ namespace MainMenuWindow
             slicedPath = Path.Combine(processPath, "sliced") + @"\";
             enhancedPath = Path.Combine(processPath, "enhanced") + @"\";
             combinedPath = Path.Combine(processPath, "combined") + @"\";
-            label3.Text = combinedPath;
+            initializeDir(processPath);
+            initializeDir(slicedPath);
+            initializeDir(enhancedPath);
+            initializeDir(combinedPath);
+        }
+
+        private void initializeDir(string dirpath)
+        {
+            if (!Directory.Exists(dirpath))
+            {
+                Directory.CreateDirectory(dirpath);
+            }
+            else
+            {
+                string[] oldimgs = Directory.GetFiles(dirpath);
+                if (oldimgs.Length > 0)
+                {
+                    foreach (string img in oldimgs)
+                    {
+                        File.Delete(img);
+                    }
+                }
+            }
         }
 
         private void SelectPicButton_Click(object sender, EventArgs e)
@@ -53,23 +75,20 @@ namespace MainMenuWindow
         private async void StartCheckButton_Click(object sender, EventArgs e)
         {
             /* 调用函数处理/直接处理图片 */
-            int count =await checkPicture(imagePath);
-            CountLabel.Text = count.ToString();
-            MessageBox.Show("检查完成！", "提示");
-
-        }
-
-        private ImageCodecInfo GetEncoder(ImageFormat format)
-        {
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
-            foreach (ImageCodecInfo codec in codecs)
+            if(pictureBox1.Image == null)
             {
-                if (codec.FormatID == format.Guid)
-                {
-                    return codec;
-                }
+                MessageBox.Show("未选择图片！","错误",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            return null;
+            progressBarofCheck.Value = 0;
+            StartCheckButton.Enabled = false;
+            SelectPicButton.Enabled = false;
+            int count = await checkPicture(imagePath);
+            StartCheckButton.Enabled = true;
+            SelectPicButton.Enabled = true;
+            CountLabel.Text = count.ToString();
+            MessageBox.Show("检查完成！", "提示",MessageBoxButtons.OK,MessageBoxIcon.Information);
+
         }
 
         private void drawBorder(string imgpath)
@@ -95,8 +114,11 @@ namespace MainMenuWindow
 
         private async Task<int> checkPicture(string originalPath)
         {
+            initializeDir(slicedPath);
+            initializeDir(enhancedPath);
+            initializeDir(combinedPath);
             int count = 0;
-            await Task.Run( () =>
+            await Task.Run(() =>
            {
                using (UsePy py = new())
                {
@@ -106,7 +128,8 @@ namespace MainMenuWindow
                    py.Enhan(slicedPath, enhancedPath);
                    //获取增强的图片地址
                    string[] ipaths = Directory.GetFiles(enhancedPath, "*.jpg");
-
+                   int m = progressBarofCheck.Maximum = ipaths.Length;
+                   int prog = 0;
                    foreach (string ipath in ipaths)
                    {
                        MLModel1.ModelInput sampleData = new MLModel1.ModelInput()
@@ -125,19 +148,24 @@ namespace MainMenuWindow
                            string[] matchimg = Directory.GetFiles(slicedPath, imgname + ".bmp", SearchOption.TopDirectoryOnly);
                            if (matchimg.Length != 0)
                            {
-                              drawBorder(matchimg[0]);
+                               drawBorder(matchimg[0]);
                            }
                        }
+                       prog++;
+                       float t = 100.0f * prog / m;
+                       progressBarofCheck.Invoke((Action)delegate { progressBarofCheck.Value = prog; });
+                       progLabel.Invoke((Action)delegate { progLabel.Text = t.ToString("0.00") + "%"; });
                    }
                    //将处理后的裁剪图片拼接起来
                    string filepath = py.Com(slicedPath, combinedPath);
                    Image image = Image.FromFile(filepath);
                    pictureBox1.Image = image;
                    originalImage = image;
-                   label3.Text = filepath;
                }
            });
-                return count;         
+            float passRatio = 100.0f * (progressBarofCheck.Maximum - count) / progressBarofCheck.Maximum;
+            ratioLabel.Text = passRatio.ToString("0.00") + "%";
+            return count;
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -188,8 +216,33 @@ namespace MainMenuWindow
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
+            if (pictureBox1.SizeMode == PictureBoxSizeMode.Zoom)
+            {
+                return;
+            }
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.Dock = DockStyle.None;
+        }
+
+        private void originalBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
+            pictureBox1.Dock = DockStyle.None;
+            btnZoomIn.Visible = true;
+            btnZoomOut.Visible = true;
+            overviewBtn.Visible = true;
+            originalBtn.Visible = false;
+        }
+
+        private void overviewBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            btnZoomIn.Visible = false;
+            btnZoomOut.Visible = false;
+            overviewBtn.Visible = false;
+            originalBtn.Visible = true;
         }
     }
 }
