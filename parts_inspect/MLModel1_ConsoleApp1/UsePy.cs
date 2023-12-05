@@ -105,27 +105,13 @@ namespace App
         {
             if (disposing)
             {
-                // 在这里释放托管资源（如果有的话）
+                // 在这里释放托管资源
+
             }
 
             // 释放非托管资源
             PythonEngine.Shutdown();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

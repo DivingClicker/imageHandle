@@ -13,10 +13,12 @@ namespace MainMenuWindow
         private ToolTip tooltipSelect, tooltipCheck;
         string imagePath = string.Empty;
         string processPath = AppDomain.CurrentDomain.BaseDirectory;
-        string slicedPath, enhancedPath, combinedPath;
+        string slicedPath, enhancedPath, combinedPath, outSitePath;
         private float scaleFactor = 1.0f;
         private Point previousMouseLocation;
         Image originalImage;
+        private List<DefectInfo> defectList = new List<DefectInfo>();
+
         public Form1()
         {
             InitializeComponent();
@@ -32,6 +34,7 @@ namespace MainMenuWindow
             slicedPath = Path.Combine(processPath, "sliced") + @"\";
             enhancedPath = Path.Combine(processPath, "enhanced") + @"\";
             combinedPath = Path.Combine(processPath, "combined") + @"\";
+            outSitePath = Path.Combine(processPath, "缺陷位置信息.txt");
             initializeDir(processPath);
             initializeDir(slicedPath);
             initializeDir(enhancedPath);
@@ -95,7 +98,7 @@ namespace MainMenuWindow
 
         }
 
-        private void drawBorder(string imgpath)
+        private void drawBorder(string imgpath, int serialNumber)
         {
             imgpath = imgpath.Replace(@"\", @"\\");
             using (Bitmap img = new Bitmap(imgpath))
@@ -109,6 +112,18 @@ namespace MainMenuWindow
                         graphics.DrawRectangle(pen, new Rectangle(0, 0, img.Width - 1, img.Height - 1));
                     }
                 }
+
+                // 存储缺陷信息
+                DefectInfo defectInfo = new DefectInfo
+                {
+                    SerialNumber = serialNumber,
+                    XCoordinate = (serialNumber % 5) * 256, // 假设256是图像大小
+                    YCoordinate = (serialNumber / 5) * 256
+                };
+                defectList.Add(defectInfo);
+
+
+
                 // 释放原始图片资源
                 img.Dispose();
                 borderedImg.Save(imgpath);
@@ -152,7 +167,7 @@ namespace MainMenuWindow
                            string[] matchimg = Directory.GetFiles(slicedPath, imgname + ".bmp", SearchOption.TopDirectoryOnly);
                            if (matchimg.Length != 0)
                            {
-                               drawBorder(matchimg[0]);
+                               drawBorder(matchimg[0],count);
                            }
                        }
                        prog++;
@@ -280,7 +295,34 @@ namespace MainMenuWindow
             }
 
         }
-    }
 
+        private void outBtn_Click(object sender, EventArgs e)
+        {
+            ExportDefectInformation();
+            MessageBox.Show("导出成功！导出文本在" + outSitePath, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        public class DefectInfo
+        {
+            public int SerialNumber { get; set; }
+            public int XCoordinate { get; set; }
+            public int YCoordinate { get; set; }
+        }
+
+        // 实现一个方法以将缺陷信息导出到文本文件
+        private void ExportDefectInformation()
+        {
+            
+            using (StreamWriter sw = new StreamWriter(outSitePath))
+            {
+                for (int i = 0; i < defectList.Count; i++)
+                {
+                    DefectInfo defect = defectList[i];
+                    sw.WriteLine($"({defect.SerialNumber}, {defect.XCoordinate}, {defect.YCoordinate})");
+                }
+            }
+        }
+
+    }
 
 }

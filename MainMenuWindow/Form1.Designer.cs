@@ -52,6 +52,7 @@
             btnZoomIn = new Button();
             label1 = new Label();
             pictureBox1 = new PictureBox();
+            outBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -67,7 +68,7 @@
             // SelectPicButton
             // 
             SelectPicButton.Font = new Font("Microsoft YaHei UI", 11F);
-            SelectPicButton.Location = new Point(3, 69);
+            SelectPicButton.Location = new Point(3, 64);
             SelectPicButton.Name = "SelectPicButton";
             SelectPicButton.Size = new Size(90, 30);
             SelectPicButton.TabIndex = 0;
@@ -78,7 +79,7 @@
             // StartCheckButton
             // 
             StartCheckButton.Font = new Font("Microsoft YaHei UI", 11F);
-            StartCheckButton.Location = new Point(3, 109);
+            StartCheckButton.Location = new Point(3, 100);
             StartCheckButton.Name = "StartCheckButton";
             StartCheckButton.Size = new Size(90, 30);
             StartCheckButton.TabIndex = 1;
@@ -113,6 +114,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            splitContainer2.Panel1.Controls.Add(outBtn);
             splitContainer2.Panel1.Controls.Add(rateLabel);
             splitContainer2.Panel1.Controls.Add(hold_label);
             splitContainer2.Panel1.Controls.Add(setBtn);
@@ -232,7 +234,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Microsoft YaHei UI", 12F);
-            label5.Location = new Point(4, 139);
+            label5.Location = new Point(10, 139);
             label5.Name = "label5";
             label5.Size = new Size(90, 21);
             label5.TabIndex = 11;
@@ -267,7 +269,7 @@
             // 
             ratioLabel.AutoSize = true;
             ratioLabel.Font = new Font("Microsoft YaHei UI", 12F);
-            ratioLabel.Location = new Point(75, 72);
+            ratioLabel.Location = new Point(83, 72);
             ratioLabel.Name = "ratioLabel";
             ratioLabel.Size = new Size(55, 21);
             ratioLabel.TabIndex = 8;
@@ -277,7 +279,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Microsoft YaHei UI", 12F);
-            label4.Location = new Point(3, 72);
+            label4.Location = new Point(12, 72);
             label4.Name = "label4";
             label4.Size = new Size(74, 21);
             label4.TabIndex = 7;
@@ -351,6 +353,17 @@
             pictureBox1.MouseDown += pictureBox1_MouseDown;
             pictureBox1.MouseMove += pictureBox1_MouseMove;
             // 
+            // outBtn
+            // 
+            outBtn.Font = new Font("Microsoft YaHei UI", 11F);
+            outBtn.Location = new Point(4, 136);
+            outBtn.Name = "outBtn";
+            outBtn.Size = new Size(90, 30);
+            outBtn.TabIndex = 9;
+            outBtn.Text = "导出位置";
+            outBtn.UseVisualStyleBackColor = true;
+            outBtn.Click += outBtn_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -403,5 +416,6 @@
         private Label result_label;
         private Label rateLabel;
         private Label hold_label;
+        private Button outBtn;
     }
 }
